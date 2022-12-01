@@ -1,16 +1,17 @@
 import { Outlet } from "react-router-dom";
 import { ReactComponent as CrownLogo } from "../../assets/crown.svg";
-import { useUserContext } from "../../context/user.context";
 import { signOutUser } from "../../utils/firebase/firebase.utils";
 import { CartIcon } from "../../components/cart-icon/cart-icon.component";
 import { CartDropdown } from "../../components/cart-dropdown/cart-dropdown.component";
-import { useCartContext } from "../../context/cart.context";
+
 import { LogoContainer, NavigationContainer, NavLinks, NavLink } from "./navigation.styles";
+import { useSelector } from "react-redux";
+import { selectIsCartOpen } from "../../store/cart/cart.selector";
 
 export const Navigation = () => {
-  const { currentUser } = useUserContext();
+  const currentUser = useSelector((state) => state.user.currentUser);
 
-  const { isCartOpen } = useCartContext();
+  const isCartOpen = useSelector(selectIsCartOpen);
 
   return (
     <>
