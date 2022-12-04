@@ -6,6 +6,9 @@ import {
   signInWithGooglePopup,
   signInAuthUserWithEmailAndPassword
 } from "../../utils/firebase/firebase.utils";
+import { useDispatch } from "react-redux";
+import { USER_ACTION_TYPES } from "../../store/user/user.types";
+import { signInWithGoogleStart, signInWithEmailStart } from "../../store/user/user.action";
 
 const defaultFormFields = {
   email: "",
@@ -13,6 +16,8 @@ const defaultFormFields = {
 };
 
 export const SignInForm = () => {
+  const dispatch = useDispatch();
+
   const [formFields, setFormFields] = useState(defaultFormFields);
 
   const { email, password } = formFields;
@@ -21,19 +26,18 @@ export const SignInForm = () => {
     setFormFields(defaultFormFields);
   };
 
-  const signInWithGoogle = async () => {
-    await signInWithGooglePopup();
+  const signInWithGoogle = () => {
+    dispatch(signInWithGoogleStart());
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      await signInAuthUserWithEmailAndPassword(email, password);
+      dispatch(signInWithEmailStart(email, password));
+      // await signInAuthUserWithEmailAndPassword(email, password);
       resetFormFields();
     } catch (error) {
-      console.log("🚀 ~ file: sign-in-form.component.jsx ~ line 37 ~ handleSubmit ~ error", error);
-
       switch (error.code) {
         case "auth/wrong-password":
           alert("incorrect password for email");
